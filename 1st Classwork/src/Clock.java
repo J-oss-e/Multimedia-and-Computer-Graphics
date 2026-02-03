@@ -32,7 +32,6 @@ public class Clock {
             int puntoX = (int) (centerX + (radius - 10) * Math.cos(angulo));
             int puntoY = (int) (centerY + (radius - 10) * Math.sin(angulo));
 
-            // Pintamos un pequeño punto (un cuadrado de 3x3 pixeles)
             for(int x = -1; x <= 1; x++){
                 for(int y = -1; y <= 1; y++){
                     image.setRGB(puntoX + x, puntoY + y, Color.white.getRGB());
