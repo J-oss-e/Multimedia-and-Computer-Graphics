@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="yes">
-      <change afterPath="$PROJECT_DIR$/1st Classwork/src/Landscape.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2nd Homework/src/AspectRatio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2nd Classwork/2nd Classwork.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/3rd Homework/3rd Homework.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/3rd Homework/src/ImageCompressor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/3rd Homework/src/ImageDecompressor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/3rd Homework/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2nd Homework/src/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/2nd Homework/Main.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,18 +30,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "J-oss-e"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;J-oss-e&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/J-oss-e/Multimedia-and-Computer-Graphics.git",
-    "accountId": "0734e2cd-cd8b-47a1-b6c6-da6ab3035534"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/J-oss-e/Multimedia-and-Computer-Graphics.git&quot;,
+    &quot;accountId&quot;: &quot;4d3e1f75-cb9b-4b83-acd5-1574ceee7e57&quot;
   }
-}]]></component>
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -51,15 +56,23 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Barycentric.executor": "Run",
     "Application.Grass.executor": "Run",
+    "Application.ImageCompressor.executor": "Run",
     "Application.Landscape.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.Paisaje.executor": "Run",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Angel/Documents/Up ISGC/4to Semestre/Multimedia",
+    "last_opened_file_path": "C:/Users/Angel/Documents/Up ISGC/4to Semestre/Multimedia-and-Computer-Graphics",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "C:/Users/usuario/Documents/Up ISGC/4to Semestre/Multimedios y graficas/2nd Homework/src/Main.java",
     "vue.rearranger.settings.migration": "true"
@@ -68,7 +81,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -81,6 +95,13 @@
       <option name="presentableId" value="Default" />
       <updated>1769109249792</updated>
       <workItem from="1769109251229" duration="137000" />
+      <workItem from="1770320059724" duration="5150000" />
+      <workItem from="1770333638070" duration="2000" />
+      <workItem from="1770334189611" duration="44000" />
+      <workItem from="1770335062698" duration="242000" />
+      <workItem from="1770336405602" duration="449000" />
+      <workItem from="1770337495629" duration="588000" />
+      <workItem from="1770658396950" duration="6753000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -99,5 +120,15 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="yes" />
     <option name="LAST_COMMIT_MESSAGE" value="yes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
