@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="yes">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2nd Classwork/2nd Classwork.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/3rd Homework/3rd Homework.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/3rd Homework/src/ImageCompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/3rd Homework/src/ImageDecompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/3rd Homework/src/Main.java" afterDir="false" />
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="2nd classwork, commited again...">
+      <change afterPath="$PROJECT_DIR$/3rd Classwork/src/hola.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/2nd Homework/Main.class" beforeDir="false" />
@@ -46,6 +41,9 @@
     <commands />
     <urls />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -62,6 +60,7 @@
     "Application.Landscape.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.Paisaje.executor": "Run",
+    "Application.SVGGenerator.executor": "Run",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -102,6 +101,11 @@
       <workItem from="1770336405602" duration="449000" />
       <workItem from="1770337495629" duration="588000" />
       <workItem from="1770658396950" duration="6753000" />
+      <workItem from="1770703972721" duration="680000" />
+      <workItem from="1770750203861" duration="2269000" />
+      <workItem from="1770926742567" duration="358000" />
+      <workItem from="1770931297443" duration="645000" />
+      <workItem from="1771306087086" duration="1941000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -111,7 +115,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770086008007</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Finished the 3rd Homework (without the video) and the 2nd classwork">
+      <option name="closed" value="true" />
+      <created>1770704339217</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770704339217</updated>
+    </task>
+    <task id="LOCAL-00003" summary="2nd classwork, commited again...">
+      <option name="closed" value="true" />
+      <created>1770704573430</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1770704573430</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,7 +139,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="yes" />
-    <option name="LAST_COMMIT_MESSAGE" value="yes" />
+    <MESSAGE value="Finished the 3rd Homework (without the video) and the 2nd classwork" />
+    <MESSAGE value="2nd classwork, commited again..." />
+    <option name="LAST_COMMIT_MESSAGE" value="2nd classwork, commited again..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
