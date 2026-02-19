@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="2nd classwork, commited again...">
-      <change afterPath="$PROJECT_DIR$/3rd Classwork/src/hola.svg" afterDir="false" />
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Example image from Moya to explain basic svg figures.">
+      <change afterPath="$PROJECT_DIR$/1st_partial/1st_partial.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1st_partial/src/EditableImage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1st_partial/src/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1st_partial/src/img.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/2nd Homework/Main.class" beforeDir="false" />
@@ -52,31 +57,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Barycentric.executor": "Run",
-    "Application.Grass.executor": "Run",
-    "Application.ImageCompressor.executor": "Run",
-    "Application.Landscape.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Paisaje.executor": "Run",
-    "Application.SVGGenerator.executor": "Run",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Angel/Documents/Up ISGC/4to Semestre/Multimedia-and-Computer-Graphics",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/usuario/Documents/Up ISGC/4to Semestre/Multimedios y graficas/2nd Homework/src/Main.java",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Barycentric.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Grass.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ImageCompressor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Landscape.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Paisaje.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SVGGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Angel/Documents/Up ISGC/4to Semestre/Multimedia-and-Computer-Graphics&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/usuario/Documents/Up ISGC/4to Semestre/Multimedios y graficas/2nd Homework/src/Main.java&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -105,7 +110,8 @@
       <workItem from="1770750203861" duration="2269000" />
       <workItem from="1770926742567" duration="358000" />
       <workItem from="1770931297443" duration="645000" />
-      <workItem from="1771306087086" duration="1941000" />
+      <workItem from="1771306087086" duration="2619000" />
+      <workItem from="1771529130170" duration="3175000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -131,7 +137,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770704573430</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="3rd Classwork, the svg generator all in one file.">
+      <option name="closed" value="true" />
+      <created>1771311588764</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1771311588764</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Example image from Moya to explain basic svg figures.">
+      <option name="closed" value="true" />
+      <created>1771532205517</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1771532205517</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,7 +163,9 @@
     <MESSAGE value="yes" />
     <MESSAGE value="Finished the 3rd Homework (without the video) and the 2nd classwork" />
     <MESSAGE value="2nd classwork, commited again..." />
-    <option name="LAST_COMMIT_MESSAGE" value="2nd classwork, commited again..." />
+    <MESSAGE value="3rd Classwork, the svg generator all in one file." />
+    <MESSAGE value="Example image from Moya to explain basic svg figures." />
+    <option name="LAST_COMMIT_MESSAGE" value="Example image from Moya to explain basic svg figures." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -149,6 +173,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.IllegalArgumentException" package="java.lang" />
           <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="javax.imageio.IIOException" package="javax.imageio" />
+          <option name="timeStamp" value="2" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/1st_partial/1st_partial.iml" filepath="$PROJECT_DIR$/1st_partial/1st_partial.iml" />
       <module fileurl="file://$PROJECT_DIR$/2nd Classwork/2nd Classwork.iml" filepath="$PROJECT_DIR$/2nd Classwork/2nd Classwork.iml" />
       <module fileurl="file://$PROJECT_DIR$/2nd Homework/2nd Homework.iml" filepath="$PROJECT_DIR$/2nd Homework/2nd Homework.iml" />
       <module fileurl="file://$PROJECT_DIR$/3rd Classwork/3rd Classwork.iml" filepath="$PROJECT_DIR$/3rd Classwork/3rd Classwork.iml" />
