@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Example image from Moya to explain basic svg figures.">
-      <change afterPath="$PROJECT_DIR$/1st_partial/1st_partial.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/1st_partial/src/EditableImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/1st_partial/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/1st_partial/src/img.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1st_partial/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/2nd Homework/Main.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,7 +107,7 @@
       <workItem from="1770926742567" duration="358000" />
       <workItem from="1770931297443" duration="645000" />
       <workItem from="1771306087086" duration="2619000" />
-      <workItem from="1771529130170" duration="3175000" />
+      <workItem from="1771529130170" duration="6725000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -153,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771532205517</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far.">
+      <option name="closed" value="true" />
+      <created>1771539661938</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1771539661938</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,7 +169,8 @@
     <MESSAGE value="2nd classwork, commited again..." />
     <MESSAGE value="3rd Classwork, the svg generator all in one file." />
     <MESSAGE value="Example image from Moya to explain basic svg figures." />
-    <option name="LAST_COMMIT_MESSAGE" value="Example image from Moya to explain basic svg figures." />
+    <MESSAGE value="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far." />
+    <option name="LAST_COMMIT_MESSAGE" value="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
