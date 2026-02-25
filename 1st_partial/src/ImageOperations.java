@@ -20,4 +20,22 @@ public class ImageOperations {
             }
     }
 
+    public static void rotateImage(BufferedImage image, double angle) {
+
+    }
+
+    public static BufferedImage cropImage(BufferedImage image, int x, int y, int width, int height) {
+
+        BufferedImage cropped = new BufferedImage(width, height, image.getType());
+
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                int originalPixel = image.getRGB(x + i, y + j);
+                cropped.setRGB(i, j, originalPixel);
+            }
+        }
+
+        return cropped;
+    }
+
 }

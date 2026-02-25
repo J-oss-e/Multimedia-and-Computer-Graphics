@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far.">
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="The invertColor function already works :D">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
@@ -107,7 +107,8 @@
       <workItem from="1770926742567" duration="358000" />
       <workItem from="1770931297443" duration="645000" />
       <workItem from="1771306087086" duration="2619000" />
-      <workItem from="1771529130170" duration="6725000" />
+      <workItem from="1771529130170" duration="7430000" />
+      <workItem from="1772038179699" duration="4428000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -157,7 +158,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771539661938</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="The invertColor function already works :D">
+      <option name="closed" value="true" />
+      <created>1771549783854</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1771549783854</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,7 +179,8 @@
     <MESSAGE value="3rd Classwork, the svg generator all in one file." />
     <MESSAGE value="Example image from Moya to explain basic svg figures." />
     <MESSAGE value="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far." />
-    <option name="LAST_COMMIT_MESSAGE" value="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far." />
+    <MESSAGE value="The invertColor function already works :D" />
+    <option name="LAST_COMMIT_MESSAGE" value="The invertColor function already works :D" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

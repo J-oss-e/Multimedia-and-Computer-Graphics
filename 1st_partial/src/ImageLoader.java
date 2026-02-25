@@ -17,19 +17,19 @@ public class ImageLoader {
                 original.getHeight(),
                 original.getType()
         );
-
+        /*
         Graphics g = copy.getGraphics(); // se usa para copiar una imagen con un pincel, es una funcion de la libreria awt
         g.drawImage(original, 0, 0, null);
         g.dispose();
+        */
 
-        /*
-       Sustituto a graphic:
+       //Sustituto a graphic:
         for (int y = 0; y < original.getHeight(); y++) {
             for (int x = 0; x < original.getWidth(); x++) {
                 copy.setRGB(x, y, original.getRGB(x, y));
             }
         }
-        */
+
         return copy;
     }
 
