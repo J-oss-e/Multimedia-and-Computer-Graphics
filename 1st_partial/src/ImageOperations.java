@@ -6,12 +6,16 @@ public class ImageOperations {
             double width = image.getWidth();
             double height = image.getHeight();
 
+        // Iterate through every pixel in the image
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
+                    // Retrieve current pixel color
                     Color C =  new Color(image.getRGB(x, y));
+                    // Create inverted color
                     Color invertedC = new Color(
                             255 - C.getRed(), 255 - C.getGreen(), 255 - C.getBlue()
                     );
+                    // Replace original pixel with inverted one
                     image.setRGB(x, y, invertedC.getRGB());
                 }
             }
@@ -21,6 +25,7 @@ public class ImageOperations {
 
         BufferedImage image = editable;
 
+        // Validate region bounds
         if (x < 0 || y < 0 ||
                 x + width > image.getWidth() ||
                 y + height > image.getHeight()) {
@@ -28,18 +33,21 @@ public class ImageOperations {
             throw new IllegalArgumentException("Rotation area out of bounds");
         }
 
+        // Validate angle
         if (angle != 90 && angle != 180 && angle != 270) {
             throw new IllegalArgumentException("Angle must be 90, 180 or 270");
         }
 
         BufferedImage region = new BufferedImage(width, height, image.getType());
 
+        // Extract region into temporary image
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
                 region.setRGB(i, j, image.getRGB(x + i, y + j));
             }
         }
 
+        // Create rotated image with correct dimensions
         BufferedImage rotated;
 
         if (angle == 90 || angle == 270) {
@@ -48,6 +56,7 @@ public class ImageOperations {
             rotated = new BufferedImage(width, height, image.getType());
         }
 
+        // Apply coordinate transformation
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
 
@@ -70,12 +79,14 @@ public class ImageOperations {
             }
         }
 
+        // Clear original region (fill with white)
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
                 image.setRGB(x + i, y + j, Color.white.getRGB());
             }
         }
 
+        // Place rotated region back into original image
         for (int j = 0; j < rotated.getHeight(); j++) {
             for (int i = 0; i < rotated.getWidth(); i++) {
 
@@ -86,6 +97,11 @@ public class ImageOperations {
         }
     }
 
+    /**
+     * Crops a selected rectangular region from the image.
+     * Creates a new BufferedImage with the selected dimensions
+     * and manually copies each pixel from the original image.
+     */
     public static BufferedImage cropImage(BufferedImage image, int x, int y, int width, int height) {
 
         BufferedImage cropped = new BufferedImage(width, height, image.getType());
