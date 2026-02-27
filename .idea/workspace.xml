@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Finish the README (that apparently didnt commited in the last one)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1st_partial/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -196,7 +192,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772174431556</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors">
+      <option name="closed" value="true" />
+      <created>1772210655865</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1772210655865</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors">
+      <option name="closed" value="true" />
+      <created>1772210767762</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1772210767762</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,7 +225,8 @@
     <MESSAGE value="The cropImage function works, only leaving space for a possible validaton so it doesnt break when parameters out of bounds :D" />
     <MESSAGE value="FInish all the documentation inside the repo, only leaving the report to finish." />
     <MESSAGE value="Finish the README (that apparently didnt commited in the last one)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finish the README (that apparently didnt commited in the last one)" />
+    <MESSAGE value="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
