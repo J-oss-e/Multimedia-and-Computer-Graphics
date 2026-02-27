@@ -2,23 +2,26 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public class ImageOperations {
-    public static void invertColors(BufferedImage image) {
-            double width = image.getWidth();
-            double height = image.getHeight();
+    public static void invertColors(BufferedImage image, int x, int y, int width, int height) {
 
-        // Iterate through every pixel in the image
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    // Retrieve current pixel color
-                    Color C =  new Color(image.getRGB(x, y));
-                    // Create inverted color
-                    Color invertedC = new Color(
-                            255 - C.getRed(), 255 - C.getGreen(), 255 - C.getBlue()
-                    );
-                    // Replace original pixel with inverted one
-                    image.setRGB(x, y, invertedC.getRGB());
-                }
+        if (x < 0 || y < 0 ||
+                x + width > image.getWidth() ||
+                y + height > image.getHeight()) {
+
+            throw new IllegalArgumentException("Invert area out of bounds");
+        }
+
+        //Iterate through the pixel selected by user in the image
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                // Retrieve current pixel color
+                Color C =  new Color(image.getRGB(x + i, y + j));
+                // Create inverted color
+                Color invertedC = new Color(255 - C.getRed(), 255 - C.getGreen(), 255 - C.getBlue());
+                //Replace original pixel with inverted one
+                image.setRGB(x + i, j+y, invertedC.getRGB());
             }
+        }
     }
 
     public void rotateImage(BufferedImage editable, int x, int y, int width, int height, int angle) {

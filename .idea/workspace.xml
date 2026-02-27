@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="The rotateImage already works, now just need to modify the main so it let you choose the functions.">
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Finish the README (that apparently didnt commited in the last one)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1st_partial/src/EditableImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/EditableImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/ImageOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1st_partial/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/1st_partial/src/Main.java" afterDir="false" />
     </list>
@@ -32,12 +30,12 @@
     &quot;assignee&quot;: &quot;J-oss-e&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/J-oss-e/Multimedia-and-Computer-Graphics.git",
-    "accountId": "0734e2cd-cd8b-47a1-b6c6-da6ab3035534"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/J-oss-e/Multimedia-and-Computer-Graphics.git&quot;,
+    &quot;accountId&quot;: &quot;0734e2cd-cd8b-47a1-b6c6-da6ab3035534&quot;
   }
-}]]></component>
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -174,7 +172,31 @@
       <option name="project" value="LOCAL" />
       <updated>1772043691548</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="FInish all the documentation inside the repo, only leaving the report to finish.">
+      <option name="closed" value="true" />
+      <created>1772169864574</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1772169864574</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Finish the README (that apparently didnt commited in the last one)">
+      <option name="closed" value="true" />
+      <created>1772174317401</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1772174317401</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Finish the README (that apparently didnt commited in the last one)">
+      <option name="closed" value="true" />
+      <created>1772174431556</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772174431556</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,7 +211,9 @@
     <MESSAGE value="First commit, finished the creation of all the required classes (so far) and start the imageLoader and EditableImage so far." />
     <MESSAGE value="The invertColor function already works :D" />
     <MESSAGE value="The cropImage function works, only leaving space for a possible validaton so it doesnt break when parameters out of bounds :D" />
-    <option name="LAST_COMMIT_MESSAGE" value="The cropImage function works, only leaving space for a possible validaton so it doesnt break when parameters out of bounds :D" />
+    <MESSAGE value="FInish all the documentation inside the repo, only leaving the report to finish." />
+    <MESSAGE value="Finish the README (that apparently didnt commited in the last one)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finish the README (that apparently didnt commited in the last one)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

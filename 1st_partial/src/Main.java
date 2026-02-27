@@ -39,8 +39,13 @@ public class Main {
             switch (choice) {
 
                 case 1:
-                    // Inverts all colors of the edited image
-                    operations.invertColors(editable.getEditedImage());
+                    System.out.println("Enter x y width height:");
+                    int invertX = scanner.nextInt();
+                    int invertY = scanner.nextInt();
+                    int invertWidth = scanner.nextInt();
+                    int invertHeight = scanner.nextInt();
+
+                    operations.invertColors(editable.getEditedImage(),invertX, invertY, invertWidth, invertHeight);
                     System.out.println("Colors inverted.");
                     break;
 
@@ -64,16 +69,16 @@ public class Main {
                 case 3:
                     // Reads rotation parameters
                     System.out.println("Enter x y width height:");
-                    int rx = scanner.nextInt();
-                    int ry = scanner.nextInt();
-                    int rwidth = scanner.nextInt();
-                    int rheight = scanner.nextInt();
+                    int rotateX = scanner.nextInt();
+                    int rotateY = scanner.nextInt();
+                    int rotateWidth = scanner.nextInt();
+                    int rotateHeight = scanner.nextInt();
 
                     System.out.println("Enter angle (90, 180, 270):");
                     int angle = scanner.nextInt();
 
                     // Rotates the specified region of the edited image
-                    operations.rotateImage(editable.getEditedImage(), rx, ry, rwidth, rheight, angle);
+                    operations.rotateImage(editable.getEditedImage(), rotateX, rotateY, rotateWidth, rotateHeight, angle);
 
                     System.out.println("Region rotated.");
                     break;
