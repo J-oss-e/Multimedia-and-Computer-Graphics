@@ -22,7 +22,7 @@ public class ImageLoader {
         g.dispose();
         */
 
-       // A substitute for graphic is a loop that goes pixel by pixel instead of using the awt function::
+       // A substitute for graphic is a loop that goes pixel by pixel instead of using the awt function:
         for (int y = 0; y < original.getHeight(); y++) {
             for (int x = 0; x < original.getWidth(); x++) {
                 copy.setRGB(x, y, original.getRGB(x, y));
