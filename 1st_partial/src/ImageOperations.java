@@ -14,6 +14,7 @@ public class ImageOperations {
         //Iterate through the pixel selected by user in the image
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
+
                 // Retrieve current pixel color
                 Color C =  new Color(image.getRGB(x + i, y + j));
                 // Create inverted color

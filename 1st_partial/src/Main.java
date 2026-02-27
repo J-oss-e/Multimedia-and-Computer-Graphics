@@ -39,6 +39,7 @@ public class Main {
             switch (choice) {
 
                 case 1:
+
                     System.out.println("Enter x y width height:");
                     int invertX = scanner.nextInt();
                     int invertY = scanner.nextInt();
