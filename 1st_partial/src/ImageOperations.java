@@ -1,8 +1,5 @@
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class ImageOperations {
     public static void invertColors(BufferedImage image) {
@@ -35,7 +32,6 @@ public class ImageOperations {
             throw new IllegalArgumentException("Angle must be 90, 180 or 270");
         }
 
-        // 1️⃣ Extraer región
         BufferedImage region = new BufferedImage(width, height, image.getType());
 
         for (int j = 0; j < height; j++) {
@@ -44,7 +40,6 @@ public class ImageOperations {
             }
         }
 
-        // 2️⃣ Crear imagen rotada
         BufferedImage rotated;
 
         if (angle == 90 || angle == 270) {
@@ -53,7 +48,6 @@ public class ImageOperations {
             rotated = new BufferedImage(width, height, image.getType());
         }
 
-        // 3️⃣ Aplicar transformación
         for (int j = 0; j < height; j++) {
             for (int i = 0; i < width; i++) {
 
