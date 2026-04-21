@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Finished the Classwork 5">
-      <change afterPath="$PROJECT_DIR$/4th Classwork/subs.srt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/5th Classwork/src/TransaltorOpenAI.java" afterDir="false" />
+    <list default="true" id="6b0a31b7-e4af-4877-9784-c12fc2b1e294" name="Changes" comment="Help me D:">
+      <change afterPath="$PROJECT_DIR$/5th Classworks/src/demo.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +32,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/J-oss-e/Multimedia-and-Computer-Graphics.git&quot;,
-    &quot;accountId&quot;: &quot;0734e2cd-cd8b-47a1-b6c6-da6ab3035534&quot;
+    &quot;accountId&quot;: &quot;4d3e1f75-cb9b-4b83-acd5-1574ceee7e57&quot;
   }
 }</component>
   <component name="McpProjectServerCommands">
@@ -50,35 +50,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Barycentric.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Grass.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ImageCompressor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Landscape.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Paisaje.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SVGGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Angel/Documents/Up ISGC/4to Semestre/Multimedia-and-Computer-Graphics&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/usuario/Documents/Up ISGC/4to Semestre/Multimedios y graficas/2nd Homework/src/Main.java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Barycentric.executor": "Run",
+    "Application.Grass.executor": "Run",
+    "Application.ImageCompressor.executor": "Run",
+    "Application.Landscape.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Paisaje.executor": "Run",
+    "Application.SVGGenerator.executor": "Run",
+    "Application.TransaltorOpenAI.executor": "Run",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Angel/Documents/Own projects/Student_Brain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/usuario/Documents/Up ISGC/4to Semestre/Multimedios y graficas/2nd Homework/src/Main.java",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -106,6 +108,8 @@
       <workItem from="1771529130170" duration="7430000" />
       <workItem from="1772038179699" duration="5184000" />
       <workItem from="1772044571913" duration="1392000" />
+      <workItem from="1773710605419" duration="1065000" />
+      <workItem from="1773776776528" duration="15000" />
     </task>
     <task id="LOCAL-00001" summary="yes">
       <option name="closed" value="true" />
@@ -211,11 +215,38 @@
       <option name="project" value="LOCAL" />
       <updated>1772210767762</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Help D:">
+      <option name="closed" value="true" />
+      <created>1773710957974</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773710957974</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Help me D:">
+      <option name="closed" value="true" />
+      <created>1773711041995</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773711041995</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="yes" />
@@ -229,7 +260,9 @@
     <MESSAGE value="FInish all the documentation inside the repo, only leaving the report to finish." />
     <MESSAGE value="Finish the README (that apparently didnt commited in the last one)" />
     <MESSAGE value="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finish change in invertedColor function, now you can choose the rectangle region to invert the colors" />
+    <MESSAGE value="Help D:" />
+    <MESSAGE value="Help me D:" />
+    <option name="LAST_COMMIT_MESSAGE" value="Help me D:" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
