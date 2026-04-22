@@ -11,6 +11,8 @@ public abstract class VisualMedia {
     protected double latitude;
     protected double longitude;
     protected LocalDateTime date;
+    protected int width;
+    protected int height;
 
     public VisualMedia() {
         this.name = "";
@@ -19,18 +21,24 @@ public abstract class VisualMedia {
         this.latitude = 0;
         this.longitude = 0;
         this.date = null;
+        this.width = 0;
+        this.height = 0;
+        
     }
 
-    public VisualMedia(String name, Path path, dataType type, double latitude, double longitude, LocalDateTime date) {
+    public VisualMedia(String name, Path path, dataType type, double latitude, double longitude, LocalDateTime date, int width, int height) {
         this.name = name;
         this.path = path;
         this.type = type;
         this.latitude = latitude;
         this.longitude = longitude;
         this.date = date;
+        this.width = width;
+        this.height = height;
+
     }
 
-    public abstract void metadata();
+    public abstract void extractMetadata();
 
     public String getName() {
         return name;
@@ -49,5 +57,11 @@ public abstract class VisualMedia {
     }
     public LocalDateTime getDate() {
         return date;
+    }
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
     }
 }
