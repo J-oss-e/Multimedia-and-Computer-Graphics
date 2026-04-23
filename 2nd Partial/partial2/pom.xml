@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.josse</groupId>
@@ -30,7 +32,7 @@
 
   <dependencies>
 
-    <!-- JavaFX -->
+    <!-- JavaFX — conservado para uso futuro -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -47,11 +49,18 @@
       <version>${javafx.version}</version>
     </dependency>
 
-    <!-- Gson -->
+    <!-- Gson — para parsear JSON de ffprobe y APIs -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
+    </dependency>
+
+    <!-- metadata-extractor — para leer EXIF/GPS de fotos JPEG/PNG -->
+    <dependency>
+      <groupId>com.drewnoakes</groupId>
+      <artifactId>metadata-extractor</artifactId>
+      <version>2.19.0</version>
     </dependency>
 
     <!-- JUnit -->
@@ -111,13 +120,13 @@
     </pluginManagement>
 
     <plugins>
-      <!-- Plugin para correr JavaFX con: mvn javafx:run -->
+      <!-- mvn javafx:run — apunta a main.java como entry point -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>com.josse.partial2.AppController</mainClass>
+          <mainClass>com.josse.main</mainClass>
         </configuration>
       </plugin>
     </plugins>
