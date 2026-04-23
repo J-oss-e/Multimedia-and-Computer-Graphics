@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -20,7 +21,7 @@ import javax.imageio.ImageIO;
 /**
  * Genera mapas con los puntos GPS del primer y último elemento.
  * Usa Nominatim (OpenStreetMap) para reverse geocoding.
- * Dibuja el mapa con Graphics2D sobre una imagen base.
+ * Descarga tiles reales de OpenStreetMap para el mapa base.
  */
 public class MapGenerator {
 
@@ -63,42 +64,147 @@ public class MapGenerator {
 
     /**
      * Genera un mapa 1080x1920 con dos pines (inicio y fin).
-     * Proyección equirectangular simple sobre el área delimitada por las coords.
+     * Usa tiles reales de OpenStreetMap Static Map API.
      */
     public Path generateMap(double lat1, double lon1, double lat2, double lon2) {
+        int W = 1080, H = 1920;
+        
+        try {
+            // Calcular el centro del mapa
+            double centerLat = (lat1 + lat2) / 2;
+            double centerLon = (lon1 + lon2) / 2;
+            
+            // Calcular zoom basado en la distancia entre puntos
+            double latDiff = Math.abs(lat1 - lat2);
+            double lonDiff = Math.abs(lon1 - lon2);
+            double maxDiff = Math.max(latDiff, lonDiff);
+            
+            // Zoom apropiado: más distancia = menos zoom
+            int zoom = maxDiff > 10 ? 4 : 
+                       maxDiff > 5  ? 5 : 
+                       maxDiff > 2  ? 6 : 
+                       maxDiff > 1  ? 7 : 
+                       maxDiff > 0.5 ? 8 : 9;
+            
+            System.out.println("Descargando mapa: centro=" + centerLat + "," + centerLon + 
+                             " zoom=" + zoom);
+            
+            // Descargar mapa base de OpenStreetMap Static Map
+            String mapUrl = String.format(
+                "https://staticmap.openstreetmap.de/staticmap.php?" +
+                "center=%f,%f&zoom=%d&size=%dx%d&maptype=mapnik",
+                centerLat, centerLon, zoom, W, H
+            );
+            
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(mapUrl))
+                .header("User-Agent", "VideoCreatorApp/1.0")
+                .GET().build();
+            
+            HttpResponse<byte[]> response = 
+                httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            
+            if (response.statusCode() != 200) {
+                System.err.println("Error descargando mapa: HTTP " + response.statusCode());
+                return generateFallbackMap(lat1, lon1, lat2, lon2);
+            }
+            
+            // Cargar la imagen del mapa
+            BufferedImage mapImage = ImageIO.read(
+                new java.io.ByteArrayInputStream(response.body()));
+            
+            if (mapImage == null) {
+                System.err.println("Imagen del mapa es null, usando fallback");
+                return generateFallbackMap(lat1, lon1, lat2, lon2);
+            }
+            
+            Graphics2D g = mapImage.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                              RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            // Convertir coordenadas geográficas a píxeles en el tile
+            int x1 = lonToPixel(lon1, centerLon, zoom, W);
+            int y1 = latToPixel(lat1, centerLat, zoom, H);
+            int x2 = lonToPixel(lon2, centerLon, zoom, W);
+            int y2 = latToPixel(lat2, centerLat, zoom, H);
+            
+            // Línea entre puntos con patrón de guiones
+            g.setColor(new Color(255, 100, 0));
+            g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, 
+                        BasicStroke.JOIN_ROUND, 0, new float[]{15, 10}, 0));
+            g.drawLine(x1, y1, x2, y2);
+            
+            // Pines
+            drawPin(g, x1, y1, new Color(0, 180, 0), "Inicio");
+            drawPin(g, x2, y2, new Color(220, 0, 0), "Fin");
+            
+            g.dispose();
+            
+            Path output = Paths.get(System.getProperty("java.io.tmpdir"), "map.png");
+            ImageIO.write(mapImage, "PNG", output.toFile());
+            System.out.println("Mapa generado exitosamente");
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Error generando mapa con tiles: " + e.getMessage());
+            e.printStackTrace();
+            return generateFallbackMap(lat1, lon1, lat2, lon2);
+        }
+    }
+
+    /**
+     * Mapa de respaldo simple si falla la descarga de tiles.
+     */
+    private Path generateFallbackMap(double lat1, double lon1, double lat2, double lon2) {
+        System.out.println("Usando mapa de respaldo simplificado");
+        
         int W = 1080, H = 1920;
         BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = img.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                            RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Fondo tipo mapa (azul oceano + verde tierra — simplificado)
-        g.setColor(new Color(170, 211, 223)); // agua
+        // Gradiente de fondo (oceano)
+        GradientPaint ocean = new GradientPaint(
+            0, 0, new Color(170, 211, 223),
+            0, H, new Color(120, 180, 200)
+        );
+        g.setPaint(ocean);
         g.fillRect(0, 0, W, H);
 
-        // Márgenes para las coordenadas
-        double margin = 5.0;
+        // Tierra simplificada
+        g.setColor(new Color(209, 219, 189));
+        double margin = 8.0;
         double minLat = Math.min(lat1, lat2) - margin;
         double maxLat = Math.max(lat1, lat2) + margin;
         double minLon = Math.min(lon1, lon2) - margin;
         double maxLon = Math.max(lon1, lon2) + margin;
 
-        // Función de proyección a píxeles
+        // Proyección de puntos
         int x1 = lonToX(lon1, minLon, maxLon, W);
         int y1 = latToY(lat1, minLat, maxLat, H);
         int x2 = lonToX(lon2, minLon, maxLon, W);
         int y2 = latToY(lat2, minLat, maxLat, H);
 
-        // Línea entre los dos puntos
+        // Área de tierra alrededor de la ruta
+        int[] xPoly = {
+            x1 - 200, x1 + 200, x2 + 200, x2 - 200,
+            (x1 + x2)/2 - 150, (x1 + x2)/2 + 150
+        };
+        int[] yPoly = {
+            y1 - 300, y1 - 300, y2 + 300, y2 + 300,
+            (y1 + y2)/2 - 200, (y1 + y2)/2 + 200
+        };
+        g.fillPolygon(xPoly, yPoly, 6);
+
+        // Línea de ruta
         g.setColor(new Color(255, 100, 0));
-        g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-                    0, new float[]{10, 10}, 0));
+        g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, 
+                    BasicStroke.JOIN_ROUND, 0, new float[]{15, 10}, 0));
         g.drawLine(x1, y1, x2, y2);
 
-        // Pin de inicio (verde)
+        // Pines
         drawPin(g, x1, y1, new Color(0, 180, 0), "Inicio");
-
-        // Pin de fin (rojo)
         drawPin(g, x2, y2, new Color(220, 0, 0), "Fin");
 
         g.dispose();
@@ -125,13 +231,18 @@ public class MapGenerator {
             int H = img.getHeight();
 
             // Caja semitransparente en la parte inferior
-            g.setColor(new Color(0, 0, 0, 160));
+            g.setColor(new Color(0, 0, 0, 180));
             g.fillRoundRect(40, H - 320, W - 80, 260, 20, 20);
+
+            // Borde dorado sutil
+            g.setColor(new Color(255, 215, 0, 100));
+            g.setStroke(new BasicStroke(3));
+            g.drawRoundRect(40, H - 320, W - 80, 260, 20, 20);
 
             // Texto de la frase
             g.setColor(Color.WHITE);
-            g.setFont(new Font("SansSerif", Font.ITALIC, 42));
-            drawWrappedText(g, phrase, 60, H - 290, W - 120, 52);
+            g.setFont(new Font("SansSerif", Font.ITALIC | Font.BOLD, 42));
+            drawWrappedText(g, phrase, 60, H - 270, W - 120, 52);
 
             g.dispose();
 
@@ -145,30 +256,51 @@ public class MapGenerator {
         }
     }
 
-    // --- Helpers privados ---
+    // --- Conversión de coordenadas geográficas a píxeles ---
 
+    private int lonToPixel(double lon, double centerLon, int zoom, int width) {
+        double scale = Math.pow(2, zoom);
+        double lonDiff = lon - centerLon;
+        return (int) (width / 2 + (lonDiff * scale * width / 360.0));
+    }
+
+    private int latToPixel(double lat, double centerLat, int zoom, int height) {
+        double scale = Math.pow(2, zoom);
+        double latDiff = centerLat - lat; // Invertido: Y crece hacia abajo
+        return (int) (height / 2 + (latDiff * scale * height / 180.0));
+    }
+
+    // Proyección simple (para mapa de respaldo)
     private int lonToX(double lon, double minLon, double maxLon, int W) {
         return (int) ((lon - minLon) / (maxLon - minLon) * W);
     }
 
     private int latToY(double lat, double minLat, double maxLat, int H) {
-        // Invertido: lat mayor = arriba
         return (int) ((1 - (lat - minLat) / (maxLat - minLat)) * H);
     }
 
+    // --- Helpers de dibujo ---
+
     private void drawPin(Graphics2D g, int x, int y, Color color, String label) {
-        int r = 18;
+        int r = 20;
+        
+        // Sombra del pin
+        g.setColor(new Color(0, 0, 0, 100));
+        g.fillOval(x - r + 2, y + r - 5, r * 2, 10);
+        
+        // Borde blanco del pin
         g.setColor(Color.WHITE);
-        g.fillOval(x - r - 2, y - r - 2, (r + 2) * 2, (r + 2) * 2);
+        g.fillOval(x - r - 3, y - r - 3, (r + 3) * 2, (r + 3) * 2);
+        
+        // Pin de color
         g.setColor(color);
         g.fillOval(x - r, y - r, r * 2, r * 2);
+        
+        // Label dentro del pin
         g.setColor(Color.WHITE);
-        g.setFont(new Font("SansSerif", Font.BOLD, 14));
+        g.setFont(new Font("SansSerif", Font.BOLD, 16));
         FontMetrics fm = g.getFontMetrics();
-        g.drawString(label, x - fm.stringWidth(label) / 2, y + 5);
-        // Sombra del pin
-        g.setColor(new Color(0, 0, 0, 80));
-        g.fillOval(x - r, y + r, r * 2, 8);
+        g.drawString(label, x - fm.stringWidth(label) / 2, y + 6);
     }
 
     private void drawWrappedText(Graphics2D g, String text,
@@ -176,6 +308,7 @@ public class MapGenerator {
         FontMetrics fm = g.getFontMetrics();
         String[] words = text.split(" ");
         StringBuilder line = new StringBuilder();
+        
         for (String word : words) {
             if (fm.stringWidth(line + word) > maxWidth) {
                 g.drawString(line.toString().trim(), x, y);
@@ -184,6 +317,8 @@ public class MapGenerator {
             }
             line.append(word).append(" ");
         }
-        if (!line.isEmpty()) g.drawString(line.toString().trim(), x, y);
+        if (!line.isEmpty()) {
+            g.drawString(line.toString().trim(), x, y);
+        }
     }
 }

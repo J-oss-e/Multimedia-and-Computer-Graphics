@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Wrapper sobre ffmpeg/ffprobe. Ejecuta comandos de procesamiento de media.
- * Todos los métodos retornan boolean para indicar éxito/fallo.
  */
 public class FFmpegProcessor {
 
@@ -17,9 +16,13 @@ public class FFmpegProcessor {
     private static final int TARGET_W = (int) ScaleCalculator.getWidth();   // 1080
     private static final int TARGET_H = (int) ScaleCalculator.getHeight();  // 1920
 
-    public FFmpegProcessor() { this.ffmpegPath = "ffmpeg"; }
+    public FFmpegProcessor() { 
+        this.ffmpegPath = "ffmpeg"; 
+    }
 
-    public FFmpegProcessor(String ffmpegPath) { this.ffmpegPath = ffmpegPath; }
+    public FFmpegProcessor(String ffmpegPath) { 
+        this.ffmpegPath = ffmpegPath; 
+    }
 
     /** Ejecuta un comando y retorna su salida como String. */
     private String commandExecution(String[] instruction) {
@@ -36,7 +39,13 @@ public class FFmpegProcessor {
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
-            process.waitFor();
+
+            int exitCode = process.waitFor();
+            
+            if (exitCode != 0) {
+                System.err.println("⚠️  Proceso terminó con código: " + exitCode);
+            }
+            
             return output.toString();
 
         } catch (IOException | InterruptedException e) {
@@ -58,15 +67,31 @@ public class FFmpegProcessor {
 
     /**
      * Escala un medio a portrait (1080x1920) manteniendo aspect ratio.
-     * Usa scale+pad: escala al máximo posible y rellena con negro.
-     * Guarda el resultado en /tmp/ y asigna scaledPath al media.
+     * Para fotos: crea un video de 3 segundos por defecto.
+     * Para videos: escala el video completo.
      */
     public boolean scaleMedia(VisualMedia media) {
-        String inputPath  = media.getPath().toString();
-        String outputPath = System.getProperty("java.io.tmpdir") +
-                            "/scaled_" + media.getPath().getFileName();
+        return scaleMedia(media, 3.0); // Por defecto 3 segundos
+    }
 
-        // Filtro: escala manteniendo ratio, luego hace pad hasta 1080x1920
+    /**
+     * Escala un medio con duración personalizada (solo aplica a fotos).
+     */
+    public boolean scaleMedia(VisualMedia media, double photoDuration) {
+        String inputPath  = media.getPath().toString();
+        
+        String fileName = media.getPath().getFileName().toString();
+        String baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+        String outputPath;
+        
+        if (media.getType() == dataType.PHOTO) {
+            outputPath = System.getProperty("java.io.tmpdir") + 
+                        "/scaled_" + baseName + ".mp4";
+        } else {
+            outputPath = System.getProperty("java.io.tmpdir") + 
+                        "/scaled_" + fileName;
+        }
+
         String filter = String.format(
             "scale=%d:%d:force_original_aspect_ratio=decrease," +
             "pad=%d:%d:(ow-iw)/2:(oh-ih)/2:black",
@@ -75,29 +100,49 @@ public class FFmpegProcessor {
 
         String[] cmd;
         if (media.getType() == dataType.PHOTO) {
-            // Para fotos: crear un video de 3 segundos
             cmd = new String[]{
-                ffmpegPath, "-y", "-loop", "1", "-i", inputPath,
+                ffmpegPath, "-y", 
+                "-loop", "1", 
+                "-i", inputPath,
                 "-vf", filter,
-                "-t", "3", "-r", "30",
-                "-c:v", "libx264", "-pix_fmt", "yuv420p",
-                outputPath.replace(".", "_scaled.")
+                "-t", String.valueOf(photoDuration), // ⚠️ Usar duración dinámica
+                "-r", "30",
+                "-c:v", "libx264", 
+                "-pix_fmt", "yuv420p",
+                outputPath
             };
-            outputPath = outputPath.replace(".", "_scaled.") ;
         } else {
             cmd = new String[]{
-                ffmpegPath, "-y", "-i", inputPath,
+                ffmpegPath, "-y", 
+                "-i", inputPath,
                 "-vf", filter,
-                "-c:v", "libx264", "-c:a", "aac",
+                "-c:v", "libx264", 
+                "-c:a", "aac",
                 outputPath
             };
         }
 
+        System.out.println("\n🎬 Escalando: " + media.getName());
+        if (media.getType() == dataType.PHOTO) {
+            System.out.println("   Duración: " + photoDuration + " segundos");
+        }
+        System.out.println("   Comando: " + String.join(" ", cmd));
+        
         String result = commandExecution(cmd);
-        boolean success = result != null && !result.contains("Error");
+        
+        boolean fileExists = Paths.get(outputPath).toFile().exists();
+        boolean success = result != null && fileExists;
+        
         if (success) {
             media.setScaledPath(Paths.get(outputPath));
+            System.out.println("   ✅ Escalado exitoso → " + outputPath);
+        } else {
+            System.err.println("   ❌ Error escalando " + media.getName());
+            if (result != null) {
+                System.err.println("   Salida ffmpeg:\n" + result);
+            }
         }
+        
         return success;
     }
 
@@ -106,42 +151,44 @@ public class FFmpegProcessor {
      * Target: -15 LUFS, true peak -1.5 dBTP, LRA 7 LU.
      */
     public boolean normalizeAudio(Path audio, Path output) {
-        // Paso 1: análisis
-        String[] analyzeCmd = {
-            ffmpegPath, "-i", audio.toString(),
-            "-af", "loudnorm=I=-15:TP=-1.5:LRA=7:print_format=json",
-            "-f", "null", "-"
-        };
-        String analysis = commandExecution(analyzeCmd);
-        if (analysis == null) return false;
-
-        // Paso 2: normalización con los valores medidos (two-pass)
-        // Para simplicidad, usamos loudnorm en un solo paso
         String[] normalizeCmd = {
-            ffmpegPath, "-y", "-i", audio.toString(),
+            ffmpegPath, "-y", 
+            "-i", audio.toString(),
             "-af", "loudnorm=I=-15:TP=-1.5:LRA=7",
             output.toString()
         };
+        
+        System.out.println("🔊 Normalizando audio: " + audio.getFileName());
         String result = commandExecution(normalizeCmd);
-        return result != null && !result.contains("Error");
+        boolean success = result != null && output.toFile().exists();
+        
+        if (success) {
+            System.out.println("   ✅ Audio normalizado");
+        } else {
+            System.err.println("   ❌ Error normalizando audio");
+        }
+        
+        return success;
     }
 
     /**
-     * Ensambla todos los medios escalados en un video final usando
-     * el protocolo de concatenación de ffmpeg.
+     * Ensambla video SIN duraciones custom (ya están embedidas en los archivos).
      */
-    public boolean assembleVideo(Path finalPath, List<VisualMedia> allMedia) {
-        // Crear archivo de lista para ffmpeg concat
+    public boolean assembleVideoSimple(Path finalPath, List<VisualMedia> allMedia) {
+        System.out.println("\n📦 Ensamblando video final...");
+        
+        // Crear archivo de lista SIMPLE (sin duraciones)
         StringBuilder concatList = new StringBuilder();
         for (VisualMedia m : allMedia) {
             Path p = (m.getScaledPath() != null) ? m.getScaledPath() : m.getPath();
-            concatList.append("file '").append(p.toAbsolutePath()).append("'\n");
+            String absPath = p.toAbsolutePath().toString().replace("\\", "/");
+            concatList.append("file '").append(absPath).append("'\n");
         }
 
-        // Escribir el concat file en tmp
         Path concatFile = Paths.get(System.getProperty("java.io.tmpdir"), "concat_list.txt");
         try {
             java.nio.file.Files.writeString(concatFile, concatList.toString());
+            System.out.println("   Lista de concatenación creada: " + concatFile);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -149,14 +196,26 @@ public class FFmpegProcessor {
 
         String[] cmd = {
             ffmpegPath, "-y",
-            "-f", "concat", "-safe", "0",
+            "-f", "concat",
+            "-safe", "0",
             "-i", concatFile.toString(),
-            "-c:v", "libx264", "-c:a", "aac",
-            "-movflags", "+faststart",
+            "-c", "copy",
             finalPath.toString()
         };
 
+        System.out.println("   Ejecutando ensamblado...");
         String result = commandExecution(cmd);
-        return result != null && !result.contains("Error");
+        boolean success = result != null && finalPath.toFile().exists();
+        
+        if (success) {
+            System.out.println("   ✅ Video final creado: " + finalPath.toAbsolutePath());
+        } else {
+            System.err.println("   ❌ Error ensamblando video");
+            if (result != null) {
+                System.err.println("   Salida ffmpeg:\n" + result);
+            }
+        }
+        
+        return success;
     }
 }

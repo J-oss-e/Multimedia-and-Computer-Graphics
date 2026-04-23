@@ -20,6 +20,7 @@ public class AppController {
     private final List<VisualMedia> allMedia;
     private Path essenceImage;
     private Path map;
+    private Path audioNarration;
 
     public AppController(String apiKey, String ffmpegPath) {
         this.apiClient       = new APIClient(apiKey);
@@ -30,6 +31,7 @@ public class AppController {
         this.videoAssembler  = null;
         this.essenceImage    = null;
         this.map             = null;
+        this.audioNarration = null;
     }
 
     /**
@@ -73,22 +75,71 @@ public class AppController {
             return;
         }
 
-        // Construir descripción basada en los lugares de los medios
+        // Construir descripción SOLO de medios con GPS válido
         StringBuilder desc = new StringBuilder();
+        StringBuilder audioDesc = new StringBuilder();
+        
         for (VisualMedia m : allMedia) {
+            // ⚠️ FILTRAR medios sin GPS
+            if (m.getLatitude() == 0.0 && m.getLongitude() == 0.0) {
+                System.out.println("⚠️  Saltando " + m.getName() + " (sin GPS)");
+                continue;
+            }
+            
             String loc = mapGenerator.getLocationName(m.getLatitude(), m.getLongitude());
             desc.append(loc).append(", ");
+            audioDesc.append("At ").append(loc)
+                    .append(" on ").append(m.getDate() != null ? m.getDate().toLocalDate() : "an unknown date")
+                    .append(". ");
+        }
+
+        // Validar que haya al menos un lugar válido
+        if (desc.length() == 0) {
+            System.err.println("❌ No hay medios con GPS válido para generar contenido AI");
+            return;
+        }
+
+        System.out.println("📝 Descripción de lugares: " + desc.toString());
+
+        // Generar imagen de esencia
+        System.out.println("🎨 Generando imagen de esencia con DALL-E...");
+        Path essenceImg = apiClient.generateEssenceImage(desc.toString());
+        
+        if (essenceImg != null && essenceImg.toFile().exists()) {
+            this.essenceImage = essenceImg;
+            System.out.println("   ✅ Imagen de esencia: " + essenceImg);
+        } else {
+            System.err.println("   ❌ Error generando imagen de esencia");
+        }
+
+        // Generar descripción narrativa para el audio
+        System.out.println("🎙️ Generando guion de audio...");
+        String audioScript = apiClient.generateAudioDescription(audioDesc.toString());
+        System.out.println("   Guion: " + audioScript.substring(0, Math.min(100, audioScript.length())) + "...");
+
+        // Convertir a audio con TTS
+        System.out.println("🔊 Generando audio con TTS...");
+        Path audioPath = Paths.get(System.getProperty("java.io.tmpdir"), "narration.mp3");
+        Path generatedAudio = apiClient.generateAudio(audioScript, audioPath);
+        
+        if (generatedAudio != null && generatedAudio.toFile().exists()) {
+            this.audioNarration = generatedAudio;
+            System.out.println("   ✅ Audio generado: " + generatedAudio);
+        } else {
+            System.err.println("   ❌ Error generando audio");
         }
 
         // Generar frase inspiracional
+        System.out.println("💭 Generando frase inspiracional...");
         String phrase = apiClient.generatePhrase(desc.toString());
-        System.out.println("Frase generada: " + phrase);
+        System.out.println("   Frase: " + phrase);
 
-        // Guardar la frase para usarla en el mapa
         this.map = Paths.get(System.getProperty("java.io.tmpdir"), "phrase.txt");
         try {
             java.nio.file.Files.writeString(this.map, phrase);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        }
     }
 
     /**
@@ -129,7 +180,7 @@ public class AppController {
      */
     public Path createVideo(Path outputPath) {
         this.videoAssembler = new VideoAssembler(
-            allMedia, map, essenceImage, ffmpegProcessor);
+            allMedia, map, essenceImage, audioNarration, ffmpegProcessor);
         return videoAssembler.generateFinalVideo(outputPath);
     }
 
