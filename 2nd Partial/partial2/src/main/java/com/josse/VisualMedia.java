@@ -38,7 +38,7 @@ public abstract class VisualMedia {
 
     }
 
-    public abstract void extractMetadata();
+    public abstract void extractMetadata(FFmpegProcessor ffmpeg);
 
     public String getName() {
         return name;

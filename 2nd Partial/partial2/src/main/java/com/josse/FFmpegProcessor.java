@@ -1,5 +1,8 @@
 package com.josse;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -16,10 +19,41 @@ public class FFmpegProcessor {
         this.ffmpegPath = ffmpegPath;
     }
 
-    private boolean commandExecution(String[] instruction){
-        boolean flag = true;
-        //TODO
-        return flag;
+    private String commandExecution(String[] instruction) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(instruction);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())
+            );
+
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            return output.toString();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String extractMediaMetadata(Path Media){
+        String[] cmd = {
+            "ffprobe",
+            "-v", "quiet",
+            "-print_format", "json",
+            "-show_streams",
+            "-show_format",
+            Media.toString()
+        }; 
+        return commandExecution(cmd); 
     }
 
     public boolean scaleMedia(VisualMedia media, double[] scales){

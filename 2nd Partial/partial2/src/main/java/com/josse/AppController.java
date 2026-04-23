@@ -25,8 +25,35 @@ public class AppController {
         this.map = null;
     }
 
-    public void addMedia(Path filePath){
-        //TODO
+    public void addMedia(Path filePath) {
+        String fileName = filePath.getFileName().toString();
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+
+        VisualMedia media;
+
+        switch (extension) {
+            case "jpg":
+            case "jpeg":
+            case "png":
+            case "webp":
+                media = new Photo();
+                media.path = filePath;
+                media.type = dataType.PHOTO;
+                break;
+            case "mp4":
+            case "mov":
+            case "avi":
+                media = new Video();
+                media.path = filePath;
+                media.type = dataType.VIDEO;
+                break;
+            default:
+                System.out.println("Formato no soportado: " + extension);
+                return;
+        }
+
+        media.extractMetadata(fFmpegProcessor);
+        allMedia.add(media);
     }
 
     public void processMedia(){
@@ -45,5 +72,9 @@ public class AppController {
         //TODO
         Path pathFinal = null;
         return pathFinal;
+    }
+
+    public List<VisualMedia> getAllMedia() {
+        return allMedia;
     }
 }
