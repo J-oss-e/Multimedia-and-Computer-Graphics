@@ -11,8 +11,9 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 
 /**
- * Representa una foto. Extrae metadata EXIF usando metadata-extractor,
- * ya que ffprobe no lee GPS de imágenes estáticas.
+ * Represents a still image (JPG, PNG, WEBP).
+ * Uses metadata-extractor for EXIF parsing because ffprobe does not expose
+ * GPS tags from static image files.
  */
 public class Photo extends VisualMedia {
 
@@ -27,14 +28,15 @@ public class Photo extends VisualMedia {
             File file = this.path.toFile();
             Metadata metadata = ImageMetadataReader.readMetadata(file);
 
-            // --- Dimensiones ---
+            // JpegDirectory only exists for JPEG files; PNG/WEBP will leave width/height at 0.
             JpegDirectory jpegDir = metadata.getFirstDirectoryOfType(JpegDirectory.class);
             if (jpegDir != null) {
                 this.width  = jpegDir.getImageWidth();
                 this.height = jpegDir.getImageHeight();
             }
 
-            // --- Fecha ---
+            // TAG_DATETIME_ORIGINAL is the shutter-press timestamp; avoids using
+            // TAG_DATETIME which reflects the last edit time instead.
             ExifSubIFDDirectory exifDir =
                 metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             if (exifDir != null) {
@@ -46,7 +48,7 @@ public class Photo extends VisualMedia {
                 }
             }
 
-            // --- GPS ---
+            // geo.isZero() guards against cameras that write 0,0 when GPS is unavailable.
             GpsDirectory gpsDir = metadata.getFirstDirectoryOfType(GpsDirectory.class);
             if (gpsDir != null) {
                 com.drew.lang.GeoLocation geo = gpsDir.getGeoLocation();
@@ -56,7 +58,6 @@ public class Photo extends VisualMedia {
                 }
             }
 
-            // Nombre del archivo como nombre del medio
             this.name = this.path.getFileName().toString();
 
         } catch (Exception e) {

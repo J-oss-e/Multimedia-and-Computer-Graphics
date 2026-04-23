@@ -7,21 +7,25 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Controlador principal. Coordina todos los componentes del sistema.
- * Punto de entrada para la lógica de negocio.
+ * Facade that coordinates all pipeline components in order:
+ * addMedia → generateAIContent → generateMap → createVideo.
+ * Each step is independent so the caller (main) can inspect intermediate
+ * results (e.g., print metadata) between stages.
  */
 public class AppController {
 
-    private final APIClient       apiClient;
-    private final FFmpegProcessor ffmpegProcessor;
-    private final MapGenerator    mapGenerator;
-    private final ScaleCalculator scaleCalculator;
-    private VideoAssembler        videoAssembler;
+    private final APIClient         apiClient;
+    private final FFmpegProcessor   ffmpegProcessor;
+    private final MapGenerator      mapGenerator;
+    private final ScaleCalculator   scaleCalculator;
+    private VideoAssembler          videoAssembler;
     private final List<VisualMedia> allMedia;
     private Path essenceImage;
     private Path map;
     private Path audioNarration;
-    private Path phraseFile; // separado de map para evitar colisión de rutas
+    // phraseFile is kept separate from map so that generateAIContent() can write
+    // the phrase before generateMap() reads it, without the two paths colliding.
+    private Path phraseFile;
 
     public AppController(String apiKey, String ffmpegPath) {
         this.apiClient       = new APIClient(apiKey);
@@ -37,8 +41,9 @@ public class AppController {
     }
 
     /**
-     * Agrega un archivo de media al proyecto.
-     * Detecta el tipo por extensión y extrae su metadata.
+     * Detects media type by file extension, extracts metadata, and adds it to the list.
+     * Metadata extraction happens here so the list is always fully populated
+     * before any AI or map generation step begins.
      */
     public void addMedia(Path filePath) {
         String fileName  = filePath.getFileName().toString();
@@ -68,8 +73,10 @@ public class AppController {
     }
 
     /**
-     * Genera el contenido AI: imagen de esencia, audio TTS y frase inspiracional.
-     * Requiere que ya se hayan agregado medios con GPS.
+     * Calls OpenAI to generate the DALL-E essence image, TTS narration audio,
+     * and inspirational phrase. Skips any media item whose GPS is exactly 0,0
+     * because that coordinate ("null island") indicates missing GPS data, not
+     * a real location in the Gulf of Guinea.
      */
     public void generateAIContent() {
         if (allMedia.isEmpty()) {
@@ -77,11 +84,11 @@ public class AppController {
             return;
         }
 
-        // Construir descripción SOLO de medios con GPS válido
         StringBuilder desc      = new StringBuilder();
         StringBuilder audioDesc = new StringBuilder();
-        
+
         for (VisualMedia m : allMedia) {
+            // 0.0 / 0.0 is the default when no GPS was found — skip to avoid bad AI prompts.
             if (m.getLatitude() == 0.0 && m.getLongitude() == 0.0) {
                 System.out.println("Saltando " + m.getName() + " (sin GPS)");
                 continue;
@@ -100,7 +107,6 @@ public class AppController {
 
         System.out.println("Descripcion de lugares: " + desc.toString());
 
-        // --- Imagen de esencia ---
         System.out.println("Generando imagen de esencia con DALL-E...");
         Path essenceImg = apiClient.generateEssenceImage(desc.toString());
         if (essenceImg != null && essenceImg.toFile().exists()) {
@@ -110,7 +116,6 @@ public class AppController {
             System.err.println("   Error generando imagen de esencia");
         }
 
-        // --- Audio TTS ---
         System.out.println("Generando guion de audio...");
         String audioScript = apiClient.generateAudioDescription(audioDesc.toString());
         System.out.println("   Guion: " + audioScript.substring(0, Math.min(100, audioScript.length())) + "...");
@@ -125,11 +130,11 @@ public class AppController {
             System.err.println("   Error generando audio");
         }
 
-        // --- Frase inspiracional (se guarda en phraseFile, NO en map) ---
         System.out.println("Generando frase inspiracional...");
         String phrase = apiClient.generatePhrase(desc.toString());
         System.out.println("   Frase: " + phrase);
 
+        // Persist phrase to a temp file so generateMap() can read it independently.
         this.phraseFile = Paths.get(System.getProperty("java.io.tmpdir"), "phrase.txt");
         try {
             java.nio.file.Files.writeString(this.phraseFile, phrase);
@@ -139,8 +144,8 @@ public class AppController {
     }
 
     /**
-     * Genera el mapa con los pines del primer y último elemento (por fecha)
-     * y superpone la frase inspiracional generada por AI.
+     * Generates the map image using only the chronologically first and last media items.
+     * The phrase written by generateAIContent() is overlaid on the map after download.
      */
     public void generateMap() {
         if (allMedia.size() < 2) {
@@ -155,7 +160,6 @@ public class AppController {
         VisualMedia first = sorted.get(0);
         VisualMedia last  = sorted.get(sorted.size() - 1);
 
-        // Mapa base con pines
         Path mapBase = mapGenerator.generateMap(
             first.getLatitude(), first.getLongitude(),
             last.getLatitude(),  last.getLongitude()
@@ -166,7 +170,7 @@ public class AppController {
             return;
         }
 
-        // Leer frase desde phraseFile (independiente de this.map)
+        // Fall back to a generic phrase if AI generation was skipped or failed.
         String phrase = "A journey worth remembering.";
         if (this.phraseFile != null && this.phraseFile.toFile().exists()) {
             try {
@@ -179,7 +183,6 @@ public class AppController {
             System.out.println("   phraseFile no encontrado, usando frase por defecto.");
         }
 
-        // Superponer frase al mapa -> this.map
         this.map = mapGenerator.addPhraseToMap(phrase, mapBase);
         if (this.map != null) {
             System.out.println("Mapa generado en: " + this.map);
@@ -188,9 +191,7 @@ public class AppController {
         }
     }
 
-    /**
-     * Ejecuta el flujo completo y retorna la ruta del video final.
-     */
+    /** Assembles the final video; must be called after generateAIContent and generateMap. */
     public Path createVideo(Path outputPath) {
         this.videoAssembler = new VideoAssembler(
             allMedia, map, essenceImage, audioNarration, ffmpegProcessor);

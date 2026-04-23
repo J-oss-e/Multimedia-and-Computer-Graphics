@@ -9,12 +9,11 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 /**
- * Cliente para la API de OpenAI.
- * - Texto/frases:    gpt-4o-mini  (barato, más que suficiente)
- * - Imagen esencia:  dall-e-3
- * - Audio TTS:       tts-1
- *
- * API Key: sk-... (reemplazar antes de entregar)
+ * HTTP client for the OpenAI API.
+ * Model choices:
+ *   - gpt-4o-mini  for text (phrase + audio script) — fast and cheap for short prompts
+ *   - dall-e-3     for the essence image — only model that supports 1024x1792 portrait
+ *   - tts-1        for narration audio — lower latency than tts-1-hd, sufficient for video
  */
 public class APIClient {
 
@@ -29,8 +28,8 @@ public class APIClient {
     }
 
     /**
-     * Genera una frase inspiracional corta basada en los lugares visitados.
-     * Usa gpt-4o-mini (rápido y económico).
+     * Returns a poetic phrase (max 20 words) inspired by the visited places.
+     * The prompt instructs the model to return ONLY the phrase so no trimming is needed.
      */
     public String generatePhrase(String description) {
         String prompt =
@@ -41,7 +40,8 @@ public class APIClient {
     }
 
     /**
-     * Genera una descripción narrativa para usar como audio del video.
+     * Returns a short narration script (under 120 words) to be fed into TTS.
+     * Kept brief so the generated audio fits within the video's slideshow duration.
      */
     public String generateAudioDescription(String description) {
         String prompt =
@@ -51,8 +51,9 @@ public class APIClient {
     }
 
     /**
-     * Genera la imagen de esencia con DALL-E 3.
-     * Retorna la ruta del archivo PNG descargado en /tmp.
+     * Generates a portrait DALL-E 3 image and saves it as a PNG in the system temp dir.
+     * Uses response_format=b64_json to avoid a second HTTP round-trip for the image URL.
+     * Size 1024x1792 is the closest DALL-E 3 option to the 1080x1920 target resolution.
      */
     public Path generateEssenceImage(String description) {
         try {
@@ -80,7 +81,8 @@ public class APIClient {
             HttpResponse<String> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Extraer b64_json de la respuesta
+            // Manual string scan avoids deserializing the full response object
+            // just to extract one base64 field.
             String resp = response.body();
             int idx = resp.indexOf("\"b64_json\"");
             if (idx == -1) {
@@ -103,8 +105,9 @@ public class APIClient {
     }
 
     /**
-     * Convierte texto a audio MP3 con OpenAI TTS (tts-1, voz "nova").
-     * Retorna la ruta del archivo de audio generado.
+     * Converts text to an MP3 file using OpenAI TTS with the "nova" voice.
+     * The audio/speech endpoint returns raw MP3 bytes (not JSON), so the response
+     * is handled with BodyHandlers.ofByteArray() and written directly to disk.
      */
     public Path generateAudio(String text, Path outputPath) {
         try {
@@ -124,7 +127,6 @@ public class APIClient {
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
-            // La respuesta es bytes directamente (MP3)
             HttpResponse<byte[]> response =
                 httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
@@ -137,8 +139,11 @@ public class APIClient {
         }
     }
 
-    // --- Helper privado ---
-
+    /**
+     * Sends a single-turn chat request to gpt-4o-mini and returns the message content.
+     * JSON is parsed manually (indexOf scan) rather than with Gson to avoid allocating
+     * a full response object for a single string field.
+     */
     private String callChatCompletion(String userMessage) {
         try {
             String body = """
@@ -162,7 +167,6 @@ public class APIClient {
                 httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             String resp = response.body();
-            // Parsear "content" del primer choice
             int idx = resp.indexOf("\"content\":");
             if (idx == -1) {
                 System.err.println("Error GPT: " + resp);

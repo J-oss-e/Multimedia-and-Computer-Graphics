@@ -4,15 +4,18 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 
 /**
- * Clase abstracta que representa cualquier medio visual (foto o video).
- * Define la estructura común y obliga a implementar extractMetadata.
+ * Abstract base for any visual media item (photo or video).
+ * Subclasses must implement extractMetadata to populate fields from
+ * their respective metadata sources (EXIF vs ffprobe).
  */
 public abstract class VisualMedia {
 
     protected String name;
     protected Path path;
-    protected Path scaledPath; // ruta del archivo escalado
+    // Separate from path so the original file is never overwritten during scaling.
+    protected Path scaledPath;
     protected dataType type;
+    // 0.0 means "no GPS data" — matches the default and the null-island check in AppController.
     protected double latitude;
     protected double longitude;
     protected LocalDateTime date;
@@ -45,7 +48,11 @@ public abstract class VisualMedia {
         this.height = height;
     }
 
-    /** Extrae metadata del archivo (dimensiones, fecha, GPS). */
+    /**
+     * Populates name, dimensions, date and GPS from the file's metadata.
+     * FFmpegProcessor is passed because Video needs ffprobe; Photo ignores it
+     * and uses metadata-extractor directly instead.
+     */
     public abstract void extractMetadata(FFmpegProcessor ffmpeg);
 
     // Getters
