@@ -58,7 +58,30 @@ public class VideoAssembler {
         // 2. Ordenar medios por fecha
         List<VisualMedia> ordered = orderMedia(allMedia);
 
-        // 3. Construir lista completa: [essenceImage, ...media, map]
+        // 3. CONVERTIR VIDEOS A FOTOS (primer frame)
+        System.out.println("\n  Convirtiendo videos a frames...");
+        List<VisualMedia> photosOnly = new ArrayList<>();
+        for (VisualMedia m : ordered) {
+            if (m.getType() == dataType.VIDEO) {
+                Path frame = ffmpeg.extractFirstFrame(m.getPath());
+                if (frame != null) {
+                    Photo framePhoto = new Photo();
+                    framePhoto.path = frame;
+                    framePhoto.type = dataType.PHOTO;
+                    framePhoto.name = m.getName() + "_frame";
+                    framePhoto.date = m.getDate();
+                    framePhoto.latitude = m.getLatitude();
+                    framePhoto.longitude = m.getLongitude();
+                    photosOnly.add(framePhoto);
+                } else {
+                    System.err.println("⚠️  No se pudo extraer frame de: " + m.getName());
+                }
+            } else {
+                photosOnly.add(m); // Ya es foto, agregar directo
+            }
+        }
+
+        // 4. Construir lista completa: [essenceImage, ...photosOnly, map]
         List<VisualMedia> finalList = new ArrayList<>();
 
         // Agregar imagen de esencia
@@ -72,7 +95,7 @@ public class VideoAssembler {
             System.err.println("⚠️  Imagen de esencia no disponible");
         }
 
-        finalList.addAll(ordered);
+        finalList.addAll(photosOnly);
 
         // Agregar mapa con frase
         if (map != null && map.toFile().exists()) {
@@ -85,10 +108,8 @@ public class VideoAssembler {
             System.err.println("⚠️  Mapa no disponible");
         }
 
-        // 4. Calcular duración por foto
-        int numPhotos = (int) finalList.stream()
-            .filter(m -> m.getType() == dataType.PHOTO)
-            .count();
+        // 5. Calcular duración por foto (ahora TODO es foto)
+        int numPhotos = finalList.size();
         
         double photoDuration = 3.0; // Default
         if (audioDuration > 0 && numPhotos > 0) {
@@ -97,19 +118,14 @@ public class VideoAssembler {
             System.out.println("📸 Duración calculada por foto: " + photoDuration + " segundos");
         }
 
-        // 5. Escalar TODOS los medios con la duración correcta
-        System.out.println("\n📐 Escalando todos los medios...");
+        // 6. Escalar TODAS las fotos con la duración correcta
+        System.out.println("\n📐 Escalando todas las fotos...");
         for (VisualMedia m : finalList) {
-            boolean ok;
-            if (m.getType() == dataType.PHOTO) {
-                ok = ffmpeg.scaleMedia(m, photoDuration); // ⚠️ Con duración custom
-            } else {
-                ok = ffmpeg.scaleMedia(m); // Videos con duración original
-            }
+            boolean ok = ffmpeg.scaleMedia(m, photoDuration);
             if (!ok) System.err.println("Error escalando: " + m.getName());
         }
 
-        // 6. Ensamblar video SIN audio (SIMPLE, sin duraciones en concat)
+        // 7. Ensamblar video SIN audio
         Path videoNoAudio = Paths.get(
             System.getProperty("java.io.tmpdir"), "video_no_audio.mp4");
         
@@ -121,7 +137,7 @@ public class VideoAssembler {
             return null;
         }
 
-        // 7. Si no hay audio, retornar el video sin audio
+        // 8. Si no hay audio, retornar el video sin audio
         if (audioNarration == null || !audioNarration.toFile().exists()) {
             System.err.println("⚠️  Audio de narración no disponible");
             System.out.println("   Retornando video sin audio...");
@@ -135,7 +151,7 @@ public class VideoAssembler {
             }
         }
 
-        // 8. Normalizar el audio según estándares de YouTube
+        // 9. Normalizar audio
         Path audioNormalized = Paths.get(
             System.getProperty("java.io.tmpdir"), "audio_normalized.mp3");
         
@@ -148,7 +164,7 @@ public class VideoAssembler {
             audioNormalized = audioNarration;
         }
 
-        // 9. Combinar video + audio normalizado
+        // 10. Combinar video + audio normalizado
         System.out.println("\n🎵 Combinando video con audio...");
         String[] combineCmd = {
             "ffmpeg", "-y",

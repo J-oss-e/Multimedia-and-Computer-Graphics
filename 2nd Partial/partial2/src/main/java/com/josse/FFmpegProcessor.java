@@ -218,4 +218,36 @@ public class FFmpegProcessor {
         
         return success;
     }
+
+        /**
+     * Extrae el primer frame de un video como imagen PNG.
+     * Retorna la ruta de la imagen extraída.
+     */
+    public Path extractFirstFrame(Path videoPath) {
+        String fileName = videoPath.getFileName().toString();
+        String baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+        Path outputPath = Paths.get(
+            System.getProperty("java.io.tmpdir"), 
+            "frame_" + baseName + ".png"
+        );
+        
+        String[] cmd = {
+            ffmpegPath, "-y",
+            "-i", videoPath.toString(),
+            "-vf", "select=eq(n\\,0)", // Primer frame
+            "-vframes", "1",
+            outputPath.toString()
+        };
+        
+        System.out.println("🖼️  Extrayendo primer frame de: " + fileName);
+        String result = commandExecution(cmd);
+        
+        if (result != null && outputPath.toFile().exists()) {
+            System.out.println("   ✅ Frame extraído: " + outputPath);
+            return outputPath;
+        } else {
+            System.err.println("   ❌ Error extrayendo frame");
+            return null;
+        }
+    }
 }

@@ -21,6 +21,7 @@ public class AppController {
     private Path essenceImage;
     private Path map;
     private Path audioNarration;
+    private Path phraseFile; // separado de map para evitar colisión de rutas
 
     public AppController(String apiKey, String ffmpegPath) {
         this.apiClient       = new APIClient(apiKey);
@@ -31,7 +32,8 @@ public class AppController {
         this.videoAssembler  = null;
         this.essenceImage    = null;
         this.map             = null;
-        this.audioNarration = null;
+        this.audioNarration  = null;
+        this.phraseFile      = null;
     }
 
     /**
@@ -66,7 +68,7 @@ public class AppController {
     }
 
     /**
-     * Genera el contenido AI: imagen de esencia y frase inspiracional.
+     * Genera el contenido AI: imagen de esencia, audio TTS y frase inspiracional.
      * Requiere que ya se hayan agregado medios con GPS.
      */
     public void generateAIContent() {
@@ -76,74 +78,69 @@ public class AppController {
         }
 
         // Construir descripción SOLO de medios con GPS válido
-        StringBuilder desc = new StringBuilder();
+        StringBuilder desc      = new StringBuilder();
         StringBuilder audioDesc = new StringBuilder();
         
         for (VisualMedia m : allMedia) {
-            // ⚠️ FILTRAR medios sin GPS
             if (m.getLatitude() == 0.0 && m.getLongitude() == 0.0) {
-                System.out.println("⚠️  Saltando " + m.getName() + " (sin GPS)");
+                System.out.println("Saltando " + m.getName() + " (sin GPS)");
                 continue;
             }
-            
             String loc = mapGenerator.getLocationName(m.getLatitude(), m.getLongitude());
             desc.append(loc).append(", ");
             audioDesc.append("At ").append(loc)
-                    .append(" on ").append(m.getDate() != null ? m.getDate().toLocalDate() : "an unknown date")
-                    .append(". ");
+                     .append(" on ").append(m.getDate() != null ? m.getDate().toLocalDate() : "an unknown date")
+                     .append(". ");
         }
 
-        // Validar que haya al menos un lugar válido
         if (desc.length() == 0) {
-            System.err.println("❌ No hay medios con GPS válido para generar contenido AI");
+            System.err.println("No hay medios con GPS válido para generar contenido AI");
             return;
         }
 
-        System.out.println("📝 Descripción de lugares: " + desc.toString());
+        System.out.println("Descripcion de lugares: " + desc.toString());
 
-        // Generar imagen de esencia
-        System.out.println("🎨 Generando imagen de esencia con DALL-E...");
+        // --- Imagen de esencia ---
+        System.out.println("Generando imagen de esencia con DALL-E...");
         Path essenceImg = apiClient.generateEssenceImage(desc.toString());
-        
         if (essenceImg != null && essenceImg.toFile().exists()) {
             this.essenceImage = essenceImg;
-            System.out.println("   ✅ Imagen de esencia: " + essenceImg);
+            System.out.println("   Imagen de esencia: " + essenceImg);
         } else {
-            System.err.println("   ❌ Error generando imagen de esencia");
+            System.err.println("   Error generando imagen de esencia");
         }
 
-        // Generar descripción narrativa para el audio
-        System.out.println("🎙️ Generando guion de audio...");
+        // --- Audio TTS ---
+        System.out.println("Generando guion de audio...");
         String audioScript = apiClient.generateAudioDescription(audioDesc.toString());
         System.out.println("   Guion: " + audioScript.substring(0, Math.min(100, audioScript.length())) + "...");
 
-        // Convertir a audio con TTS
-        System.out.println("🔊 Generando audio con TTS...");
-        Path audioPath = Paths.get(System.getProperty("java.io.tmpdir"), "narration.mp3");
+        System.out.println("Generando audio con TTS...");
+        Path audioPath      = Paths.get(System.getProperty("java.io.tmpdir"), "narration.mp3");
         Path generatedAudio = apiClient.generateAudio(audioScript, audioPath);
-        
         if (generatedAudio != null && generatedAudio.toFile().exists()) {
             this.audioNarration = generatedAudio;
-            System.out.println("   ✅ Audio generado: " + generatedAudio);
+            System.out.println("   Audio generado: " + generatedAudio);
         } else {
-            System.err.println("   ❌ Error generando audio");
+            System.err.println("   Error generando audio");
         }
 
-        // Generar frase inspiracional
-        System.out.println("💭 Generando frase inspiracional...");
+        // --- Frase inspiracional (se guarda en phraseFile, NO en map) ---
+        System.out.println("Generando frase inspiracional...");
         String phrase = apiClient.generatePhrase(desc.toString());
         System.out.println("   Frase: " + phrase);
 
-        this.map = Paths.get(System.getProperty("java.io.tmpdir"), "phrase.txt");
+        this.phraseFile = Paths.get(System.getProperty("java.io.tmpdir"), "phrase.txt");
         try {
-            java.nio.file.Files.writeString(this.map, phrase);
-        } catch (Exception e) { 
-            e.printStackTrace(); 
+            java.nio.file.Files.writeString(this.phraseFile, phrase);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * Genera el mapa con los pines del primer y último elemento (por fecha).
+     * Genera el mapa con los pines del primer y último elemento (por fecha)
+     * y superpone la frase inspiracional generada por AI.
      */
     public void generateMap() {
         if (allMedia.size() < 2) {
@@ -158,21 +155,37 @@ public class AppController {
         VisualMedia first = sorted.get(0);
         VisualMedia last  = sorted.get(sorted.size() - 1);
 
-        // Generar mapa base
+        // Mapa base con pines
         Path mapBase = mapGenerator.generateMap(
             first.getLatitude(), first.getLongitude(),
             last.getLatitude(),  last.getLongitude()
         );
 
-        // Leer frase guardada y superponerla
-        String phrase = "A journey worth remembering.";
-        if (this.map != null && this.map.toFile().exists()) {
-            try { phrase = java.nio.file.Files.readString(this.map); }
-            catch (Exception e) { e.printStackTrace(); }
+        if (mapBase == null || !mapBase.toFile().exists()) {
+            System.err.println("Error: no se pudo generar el mapa base.");
+            return;
         }
 
+        // Leer frase desde phraseFile (independiente de this.map)
+        String phrase = "A journey worth remembering.";
+        if (this.phraseFile != null && this.phraseFile.toFile().exists()) {
+            try {
+                phrase = java.nio.file.Files.readString(this.phraseFile).trim();
+                System.out.println("   Frase leída: " + phrase);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("   phraseFile no encontrado, usando frase por defecto.");
+        }
+
+        // Superponer frase al mapa -> this.map
         this.map = mapGenerator.addPhraseToMap(phrase, mapBase);
-        System.out.println("Mapa generado en: " + this.map);
+        if (this.map != null) {
+            System.out.println("Mapa generado en: " + this.map);
+        } else {
+            System.err.println("Error superponiendo frase al mapa.");
+        }
     }
 
     /**
